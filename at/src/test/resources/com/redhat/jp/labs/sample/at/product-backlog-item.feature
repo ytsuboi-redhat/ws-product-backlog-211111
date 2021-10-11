@@ -47,3 +47,56 @@ Feature: Product Backlog Item の登録・編集・削除
       | name        | label                 | story point |
       | TODO:item_2 | TODO: label_A,label_C | 3           |
       | TODO:item_3 |                       | 3           |
+
+  Scenario Outline: Product Backlog Item の登録において Story Point は 1,2,3,5,8,13,21,? が設定可能であること。
+    Given Product Backlog Item 登録画面を開く
+    When  story point 項目に {story point} を入力する
+    Then  "story point" 項目のエラーメッセージとして "入力された story point は無効です" が表示されない
+    And   "update" ボタンはクリック可能である
+    Examples:
+      | story point |
+      | 1           |
+      | 2           |
+      | 3           |
+      | 5           |
+      | 8           |
+      | 13          |
+      | 21          |
+      | ?           |
+
+  Scenario Outline: Product Backlog Item の登録において Story Point は 1,2,3,5,8,13,21,? 以外は設定不可能であること。
+    Given Product Backlog Item 登録画面を開く
+    When  story point 項目に {story point} を入力する
+    Then  "story point" 項目のエラーメッセージとして "入力された story point は無効です" が表示される
+    And   "update" ボタンはクリック可能ではない
+    Examples:
+      | story point |
+      | 0           |
+      | 4           |
+      | 6           |
+      | 7           |
+      | 9           |
+      | 10          |
+      | 11          |
+      | 12          |
+      | 14          |
+      | 15          |
+      | 16          |
+      | 17          |
+      | 18          |
+      | 19          |
+      | 20          |
+      | 22          |
+      | 23          |
+      | 24          |
+      | 25          |
+      | 26          |
+      | 27          |
+      | 28          |
+      | 29          |
+      | 30          |
+      | 31          |
+      | 32          |
+      | 33          |
+      | 34          |
+
