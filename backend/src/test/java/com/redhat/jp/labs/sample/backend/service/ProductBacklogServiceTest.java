@@ -1,6 +1,7 @@
 package com.redhat.jp.labs.sample.backend.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -33,8 +34,8 @@ public class ProductBacklogServiceTest {
 
     @Test
     public void getBacklog() {
-        ProductBacklogItem productBacklogItem1 = new ProductBacklogItem(1L, "title1", "status1", "desc1");
-        ProductBacklogItem productBacklogItem2 = new ProductBacklogItem(2L, "title2", "status2", "desc2");
+        ProductBacklogItem productBacklogItem1 = new ProductBacklogItem(1L, "name1", "label1", "desc1", "1", "memo1", new byte[1]);
+        ProductBacklogItem productBacklogItem2 = new ProductBacklogItem(2L, "name2", "label2", "desc2", "2", "memo2", new byte[2]);
         List<ProductBacklogItem> list = Lists.newArrayList(productBacklogItem1, productBacklogItem2);
 
         when(productBacklogItemRepository.find(100, 200)).thenReturn(list);
@@ -43,9 +44,9 @@ public class ProductBacklogServiceTest {
     }
 
     @Test
-    public void getTodo() {
+    public void getBacklogItem() {
         long id = 1L;
-        ProductBacklogItem productBacklogItem = new ProductBacklogItem(id, "title1", "status1", "desc1");
+        ProductBacklogItem productBacklogItem = new ProductBacklogItem(id, "name1", "label1", "desc1", "1", "memo1", new byte[1]);
 
         when(productBacklogItemRepository.findById(id)).thenReturn(Optional.of(productBacklogItem));
 
@@ -63,8 +64,30 @@ public class ProductBacklogServiceTest {
     }
 
     @Test
+    public void validateStoryPoint() {
+        String[] validPoints = new String[] { "1", "2", "3", "5", "8", "13", "21", "?" };
+        for (String point : validPoints) {
+            ProductBacklogItem productBacklogItem = new ProductBacklogItem(1L, "name1", "label1", "desc1", point, "memo1", new byte[1]);
+            productBacklogService.validateStoryPoint(productBacklogItem);
+        }
+    }
+
+    @Test
+    public void validateStoryPointNotValid() {
+        String[] invalidPoints = new String[] { "-1", "0", "4", "6", "7", "9", "10", "11", "12", "14", "15", "16", "17", "18", "19", "20", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34" };
+        for (String point : invalidPoints) {
+            ProductBacklogItem productBacklogItem = new ProductBacklogItem(1L, "name1", "label1", "desc1", point, "memo1", new byte[1]);
+            try {
+                productBacklogService.validateStoryPoint(productBacklogItem);
+                fail(String.format("story point: %s is invalid but exception is not thrown.", point));
+            } catch (ProductBacklogItemValidationException e) {
+            }
+        }
+    }
+
+    @Test
     public void saveBacklogItem() {
-        ProductBacklogItem productBacklogItem = new ProductBacklogItem(null, null, null);
+        ProductBacklogItem productBacklogItem = new ProductBacklogItem(1L, "name1", "label1", "desc1", "1", "memo1", new byte[1]);
 
         ArgumentCaptor<ProductBacklogItem> captor = ArgumentCaptor.forClass(ProductBacklogItem.class);
         when(productBacklogItemRepository.save(captor.capture())).thenReturn(productBacklogItem);

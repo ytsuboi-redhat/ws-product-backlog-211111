@@ -1,5 +1,6 @@
 package com.redhat.jp.labs.sample.backend.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductBacklogService {
+
+    private static final String[] VALID_STORY_POINTS = new String[] { "1", "2", "3", "5", "8", "13", "21", "?" };
 
     @Autowired
     ProductBacklogItemRepository productBacklogItemRepository;
@@ -30,6 +33,12 @@ public class ProductBacklogService {
             return item.get();
         }
         return null;
+    }
+
+    public void validateStoryPoint(ProductBacklogItem productBacklogItem) {
+        if (!Arrays.asList(VALID_STORY_POINTS).contains(productBacklogItem.getStoryPoint())) {
+            throw new ProductBacklogItemValidationException();
+        }
     }
 
     public ProductBacklogItem saveBacklogItem(ProductBacklogItem productBacklogItem) {

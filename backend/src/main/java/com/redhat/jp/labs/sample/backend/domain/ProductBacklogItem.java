@@ -1,5 +1,6 @@
 package com.redhat.jp.labs.sample.backend.domain;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -9,113 +10,119 @@ import org.springframework.data.annotation.Id;
 
 public class ProductBacklogItem extends GenericDomain {
 
-    private static final long serialVersionUID = -4841313814182406622L;
-
     @Id
-    private Long todoId;
+    private Long itemId;
 
     @NotNull
     @Size(min = 1)
-    private String title;
+    private String name;
 
-    @NotNull
-    @Size(min = 1)
-    private String status;
+    private String label;
 
     private String description;
+
+    private String storyPoint;
+
+    private String memo;
+
+    private byte[] attachment;
 
     public ProductBacklogItem() {
     }
 
-    public ProductBacklogItem(String title, String status, String description) {
-        this.title = title;
-        this.status = status;
+    public ProductBacklogItem(String name, String label, String description, String storyPoint, String memo, byte[] attachment) {
+        this.name = name;
+        this.label = label;
         this.description = description;
+        this.storyPoint = storyPoint;
+        this.memo = memo;
+        this.attachment = attachment;
     }
 
-    public ProductBacklogItem(long todoId, String title, String status, String description) {
-        this.todoId = todoId;
-        this.title = title;
-        this.status = status;
+    public ProductBacklogItem(long itemId, String name, String label, String description, String storyPoint, String memo, byte[] attachment) {
+        this.itemId = itemId;
+        this.name = name;
+        this.label = label;
         this.description = description;
+        this.storyPoint = storyPoint;
+        this.memo = memo;
+        this.attachment = attachment;
     }
 
     @Override
     protected Object keyObject() {
-        return getTodoId();
+        return getItemId();
     }
 
-    /**
-     * @return the todoId
-     */
-    public Long getTodoId() {
-        return todoId;
+    public Long getItemId() {
+        return itemId;
     }
 
-    /**
-     * @param todoId the todoId to set
-     */
-    public void setTodoId(Long todoId) {
-        this.todoId = todoId;
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
     }
 
-    /**
-     * @return the title
-     */
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    /**
-     * @param title the title to set
-     */
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    /**
-     * @return the description
-     */
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    /**
-     * @param description the description to set
-     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    /**
-     * @return the status
-     */
-    public String getStatus() {
-        return status;
+    public String getStoryPoint() {
+        return storyPoint;
     }
 
-    /**
-     * @param status the status to set
-     */
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStoryPoint(String storyPoint) {
+        this.storyPoint = storyPoint;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public byte[] getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(byte[] attachment) {
+        this.attachment = attachment;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ProductBacklogItem)) {
-            return false;
-        }
-        ProductBacklogItem productBacklogItem = (ProductBacklogItem) o;
-        return todoId == productBacklogItem.todoId && Objects.equals(title, productBacklogItem.title) && Objects.equals(status, productBacklogItem.status)
-                && Objects.equals(description, productBacklogItem.description);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ProductBacklogItem that = (ProductBacklogItem) o;
+        return itemId.equals(that.itemId) && name.equals(that.name) && Objects.equals(label, that.label) && Objects.equals(description, that.description) && Objects.equals(storyPoint, that.storyPoint) && Objects.equals(memo, that.memo) && Arrays.equals(attachment, that.attachment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(todoId, title, status, description);
+        int result = Objects.hash(super.hashCode(), itemId, name, label, description, storyPoint, memo);
+        result = 31 * result + Arrays.hashCode(attachment);
+        return result;
     }
-
 }
