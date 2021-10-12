@@ -44,7 +44,7 @@
         <button id="delete-button" class="btn btn-outline-primary">delete</button>
       </div>
       <div class="col-sm">
-        <button id="delete-button" class="btn btn-outline-primary">update</button>
+        <button id="update-button" class="btn btn-outline-primary">update</button>
       </div>
     </div>
   </div>
