@@ -51,6 +51,8 @@ public class CommonStepdefs {
 
     @Then("Product Backlog 画面にて以下の通りに Product Backlog Item が一覧で表示される")
     public void productBacklog画面にて以下の通りにProductBacklogItemが一覧で表示される(DataTable dataTable) {
+        productBacklog画面を開く();
+
         List<Map<String, String>> dataTableRows = dataTable.asMaps();
         ElementsCollection trCollection = $$("#product-backlog tbody tr");
         trCollection.shouldHaveSize(dataTableRows.size());
