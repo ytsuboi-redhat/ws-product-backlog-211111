@@ -5,41 +5,53 @@ Feature: Product Backlog Item の登録・編集・削除
   Background:
     Given Product Backlog 画面を開く
 
-  Scenario: Product Backlog Item の name, label, story point, attachment が登録できること
+  Scenario: Product Backlog Item の name, label, description, story point, memo, attachment が登録できること
     Given Product Backlog Item 登録画面を開く
-    When  Prodct Backlog Item として name, label, story point, attachment に以下を設定して登録する
+    When  Prodct Backlog Item として name, label, description, story point, memo, attachment に以下を設定して登録する
       | name        | TODO:item_21              |
       | label       | TODO:label_A,TODO:label_C |
+      | description | TODO:description          |
       | story point | 8                         |
+      | memo        | TODO:memo                 |
       | attachment  | src/test/resources/attachment/product-backlog-item.feature/ui-img.png |
-    Then  Product Backlog 画面にて以下の通りに Product Backlog Item が一覧で表示される
-      | name         | label                 | story point |
-      | TODO:item_21 | TODO: label_A,label_C | 8           |
-    And   Product Backlog Item 画面にて name が "TODO:item_21" の attachment に "src/test/resources/attachment/product-backlog-item.feature/ui-img.png" の画像が表示される
-
-  Scenario: Product Backlog Item の name, label, story point, attachment が表示できること
-    Given 3 個の Product Backlog Item が登録されている
-    When  name が "TODO:item_1" の Product Backlog Item を選択して Prodcut Backlog Item 画面を開く
-    Then  Prodcut Backlog Item 画面にて以下の通り name, label, story point が表示される
-      | name        | TODO:item_1           |
-      | label       | TODO: label_A,label_C |
-      | story point | 8                     |
+    And   name が "TODO:item_21" の Product Backlog Item を選択して Prodcut Backlog Item 画面を開く
+    Then  Prodcut Backlog Item 画面にて以下の通り name, label, description, story point, memo が表示される
+      | name        | TODO:item_21              |
+      | label       | TODO:label_A,TODO:label_C |
+      | description | TODO:description_21       |
+      | story point | 8                         |
+      | memo        | TODO:memo_21              |
     And   attachment に "src/test/resources/attachment/product-backlog-item.feature/ui-img.png" の画像が表示される
 
-  Scenario: Product Backlog Item の name, label, story point, attachment が更新できること
+  Scenario: Product Backlog Item の name, label, description, story point, memo, attachment が表示できること
+    Given 3 個の Product Backlog Item が登録されている
+    When  name が "TODO:item_1" の Product Backlog Item を選択して Prodcut Backlog Item 画面を開く
+    Then  Prodcut Backlog Item 画面にて以下の通り name, label, description, story point, memo が表示される
+      | name        | TODO:item_1               |
+      | label       | TODO:label_A,TODO:label_C |
+      | description | TODO:description_1        |
+      | story point | 8                         |
+      | memo        | TODO:memo_1               |
+    And   attachment に "src/test/resources/attachment/product-backlog-item.feature/ui-img.png" の画像が表示される
+
+  Scenario: Product Backlog Item の name, label, description, story point, memo, attachment が更新できること
     Given 3 個の Product Backlog Item が登録されている
     And   name が "TODO:item_2" の Product Backlog Item を選択して Prodcut Backlog Item 画面を開く
-    When  Prodct Backlog Item として name, label, story point, attachment に以下を設定して登録する
-      | name        | TODO:item_2          |
-      | label       | TODO: label_A,label_C,label_D |
-      | story point | 5                     |
+    When  Prodct Backlog Item として name, label, description, story point, memo, attachment に以下を設定して登録する
+      | name        | TODO:item_2                            |
+      | label       | TODO:label_A,TODO:label_C,TODO:label_D |
+      | description | TODO:description_2                     |
+      | story point | 5                                      |
+      | memo        | TODO:memo_2                            |
       | attachment  | src/test/resources/attachment/product-backlog-item.feature/ui-img.png |
-    Then  Product Backlog 画面にて以下の通りに Product Backlog Item が一覧で表示される
-      | name        | label                         | story point |
-      | TODO:item_1 | TODO: label_A,label_C         | 8           |
-      | TODO:item_2 | TODO: label_A,label_C,label_D | 5           |
-      | TODO:item_3 |                               | 3           |
-    And   Product Backlog Item 画面にて name が "TODO:item_2" の attachment に "src/test/resources/attachment/product-backlog-item.feature/ui-img.png" の画像が表示される
+    And   name が "TODO:item_2" の Product Backlog Item を選択して Prodcut Backlog Item 画面を開く
+    Then  Prodcut Backlog Item 画面にて以下の通り name, label, description, story point, memo が表示される
+      | name        | TODO:item_2                            |
+      | label       | TODO:label_A,TODO:label_C,TODO:label_D |
+      | description | TODO:description_2                     |
+      | story point | 5                                      |
+      | memo        | TODO:memo_2                            |
+    And   attachment に "src/test/resources/attachment/product-backlog-item.feature/ui-img.png" の画像が表示される
 
   Scenario: Product Backlog Item の削除ができること
     Given 3 個の Product Backlog Item が登録されている

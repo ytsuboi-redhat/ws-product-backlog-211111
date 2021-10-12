@@ -20,30 +20,22 @@ public class ProductBacklogItemStepdefs {
         $("#register-button").click();
     }
 
-    @When("Prodct Backlog Item として name, label, story point, attachment に以下を設定して登録する")
+    @When("Prodct Backlog Item として name, label, description, story point, memo, attachment に以下を設定して登録する")
     public void prodctBacklogItemとしてNameLabelStoryPointAttachmentに以下を設定して登録する(DataTable dataTable) {
         Map<String, String> dataMap = dataTable.asMap(String.class, String.class);
         $("#name").setValue(dataMap.get("name"));
         $("#labels").setValue(dataMap.get("label").replaceAll(",", " "));
+        $("#description").setValue(dataMap.get("description"));
         $("#story-point").setValue(dataMap.get("story point"));
+        $("#memo").setValue(dataMap.get("memo"));
         File attachmentFile = new File(dataMap.get("attachment"));
         $("#attachment").setValue(attachmentFile.getAbsolutePath());
 
         $("#register-button").click();
     }
 
-    @And("Product Backlog Item 画面にて name が {string} の attachment に {string} の画像が表示される")
-    public void productBacklogItem画面にてNameがのAttachmentにの画像が表示される(String name, String collectAttachmentFilePath) throws IOException {
-        openBacklogItem(name);
-        assertAttachment(collectAttachmentFilePath);
-    }
-
     @When("name が {string} の Product Backlog Item を選択して Prodcut Backlog Item 画面を開く")
     public void nameがのProductBacklogItemを選択してProdcutBacklogItem画面を開く(String name) {
-        openBacklogItem(name);
-    }
-
-    private void openBacklogItem(String name) {
         ElementsCollection trCollection = $$("#product-backlog tbody tr");
         for (int i = 0; i < trCollection.size(); i++) {
             SelenideElement tr = trCollection.get(i);
@@ -54,20 +46,7 @@ public class ProductBacklogItemStepdefs {
         }
     }
 
-    private void assertAttachment(String collectAttachmentFilePath) {
-        try {
-            $("#attachment img").should(Condition.visible);
-            File actualAttachment = $("#attachment img").download();
-            File expectedAttachment = new File(collectAttachmentFilePath);
-            byte[] actualBytes = Files.readAllBytes(actualAttachment.toPath());
-            byte[] expectedBytes = Files.readAllBytes(expectedAttachment.toPath());
-            assertThat(actualBytes).contains(expectedBytes);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Then("Prodcut Backlog Item 画面にて以下の通り name, label, story point が表示される")
+    @Then("Prodcut Backlog Item 画面にて以下の通り name, label, description, story point, memo が表示される")
     public void prodcutBacklogItem画面にて以下の通りNameLabelStoryPointが表示される(DataTable dataTable) {
         Map<String, String> dataMap = dataTable.asMap(String.class, String.class);
 
@@ -81,12 +60,19 @@ public class ProductBacklogItemStepdefs {
             $$("#product-backlog-item .labels .badge").shouldHave(CollectionCondition.exactTexts(collectLabels));
         }
 
+        $("#product-backlog-item .description").should(Condition.text(dataMap.get("description")));
         $("#product-backlog-item .story-point").should(Condition.text(dataMap.get("story point")));
+        $("#product-backlog-item .memo").should(Condition.text(dataMap.get("memo")));
     }
 
     @And("attachment に {string} の画像が表示される")
-    public void attachmentにの画像が表示される(String collectAttachmentFilePath) {
-        assertAttachment(collectAttachmentFilePath);
+    public void attachmentにの画像が表示される(String collectAttachmentFilePath) throws IOException {
+        $("#attachment img").should(Condition.visible);
+        File actualAttachment = $("#attachment img").download();
+        File expectedAttachment = new File(collectAttachmentFilePath);
+        byte[] actualBytes = Files.readAllBytes(actualAttachment.toPath());
+        byte[] expectedBytes = Files.readAllBytes(expectedAttachment.toPath());
+        assertThat(actualBytes).contains(expectedBytes);
     }
 
     @When("Product Backlog Item を削除する")
