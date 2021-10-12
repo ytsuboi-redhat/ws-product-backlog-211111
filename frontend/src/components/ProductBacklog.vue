@@ -5,7 +5,7 @@
       <div class="col-sm">
         <div id="result">{{ message }}</div>
         <div>
-          <table id="todo-list" class="table table-bordered">
+          <table id="product-backlog" class="table table-bordered">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -14,14 +14,16 @@
                 <th scope="col">story point</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="item in backlog" :key="item.itemId" v-bind:id="'item-' + item.itemId">
-                <td class="index">{{ item.itemId }}</td>
+            <draggable tag="tbody" v-model="backlog" @end="end">
+              <tr v-for="item in backlog" v-bind:key="item.itemId" v-bind:id="'item-' + item.itemId">
+                <td class="itemId">{{ item.itemId }}</td>
                 <td class="name">{{ item.name }}</td>
-                <td class="labels">{{ item.label }}</td>
+                <td class="labels">
+                  <span v-for="label in item.labels" v-bind:key="label"><span class="badge badge-primary">{{ label }}</span>&nbsp;</span>
+                </td>
                 <td class="story-point">{{ item.storyPoint}}</td>
               </tr>
-            </tbody>
+            </draggable>
           </table>
         </div>
       </div>
@@ -30,37 +32,46 @@
 </template>
 
 <script>
-// import TodoService from '@/services/TodoService'
+import backlogData from '@/assets/data/backlog.json'
+
+const draggable = require('vuedraggable')
 
 export default {
   name: 'Backlog',
   props: {
     msg: String
   },
+  components: {
+    draggable: draggable
+  },
   data () {
     return {
       message: '',
-      backlog: [{
-        itemId: 1,
-        name: 'data_name1',
-        label: 'data_label',
-        storyPoint: 5
-      },
-      {
-        itemId: 2,
-        name: 'data_name2',
-        label: 'data_label',
-        storyPoint: 3
-      },
-      {
-        itemId: 3,
-        name: 'data_name3',
-        label: 'data_label',
-        storyPoint: 8
-      }]
+      // backlog: [{
+      //   itemId: 1,
+      //   name: 'data_name1',
+      //   label: 'data_label',
+      //   storyPoint: 5
+      // },
+      // {
+      //   itemId: 2,
+      //   name: 'data_name2',
+      //   label: 'data_label',
+      //   storyPoint: 3
+      // },
+      // {
+      //   itemId: 3,
+      //   name: 'data_name3',
+      //   label: 'data_label',
+      //   storyPoint: 8
+      // }]
+      backlog: backlogData
     }
   },
   methods: {
+    end: () => {
+      console.log(backlogData)
+    }
   }
 }
 </script>
