@@ -24,14 +24,14 @@ public class ProductBacklogItemStepdefs {
     public void prodctBacklogItemとしてNameLabelStoryPointAttachmentに以下を設定して登録する(DataTable dataTable) {
         Map<String, String> dataMap = dataTable.asMap(String.class, String.class);
         $("#name").setValue(dataMap.get("name"));
-        $("#labels").setValue(dataMap.get("label").replaceAll(",", " "));
+        $("#labels").setValue(dataMap.get("label"));
         $("#description").setValue(dataMap.get("description"));
         $("#story-point").setValue(dataMap.get("story point"));
         $("#memo").setValue(dataMap.get("memo"));
         File attachmentFile = new File(dataMap.get("attachment"));
         $("#attachment").setValue(attachmentFile.getAbsolutePath());
 
-        $("#register-button").click();
+        $("#update-button").click();
     }
 
     @When("name が {string} の Product Backlog Item を選択して Prodcut Backlog Item 画面を開く")
@@ -49,20 +49,11 @@ public class ProductBacklogItemStepdefs {
     @Then("Prodcut Backlog Item 画面にて以下の通り name, label, description, story point, memo が表示される")
     public void prodcutBacklogItem画面にて以下の通りNameLabelStoryPointが表示される(DataTable dataTable) {
         Map<String, String> dataMap = dataTable.asMap(String.class, String.class);
-
-        $("#product-backlog-item .name").should(Condition.text(dataMap.get("name")));
-
-        if (dataMap.get("label") == null) {
-            $("#product-backlog-item .labels").should(Condition.empty);
-        } else {
-            String[] collectLabels = dataMap.get("label").split(",");
-            $$("#product-backlog-item .labels .badge").shouldHaveSize(collectLabels.length);
-            $$("#product-backlog-item .labels .badge").shouldHave(CollectionCondition.exactTexts(collectLabels));
-        }
-
-        $("#product-backlog-item .description").should(Condition.text(dataMap.get("description")));
-        $("#product-backlog-item .story-point").should(Condition.text(dataMap.get("story point")));
-        $("#product-backlog-item .memo").should(Condition.text(dataMap.get("memo")));
+        $("#name").should(Condition.value(dataMap.get("name")));
+        $("#labels").should(Condition.value(dataMap.get("label")));
+        $("#description").should(Condition.text(dataMap.get("description")));
+        $("#story-point").should(Condition.value(dataMap.get("story point")));
+        $("#memo").should(Condition.text(dataMap.get("memo")));
     }
 
     @And("attachment に {string} の画像が表示される")
