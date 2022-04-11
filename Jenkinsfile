@@ -16,7 +16,7 @@ pipeline {
                 dir('frontend') {
                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
                         // prepare
-                        sh 'npm install --slient'
+                        sh 'npm install --silent'
                         // Run Frontend UT
                         // sh 'npm run test:unit'
                     }
@@ -59,7 +59,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-                        sh 'nohup npm run serve'
+                        sh 'npm run serve &'
                     }   
                 }
             }
@@ -73,7 +73,7 @@ pipeline {
         stage('受け入れテスト') {
             steps {
                 script {
-                    sh '_JAVA_OPTIONS=-Dfile.encoding=UTF-8 xvfb-run mvn clean test -f at -Dselenide.baseUrl=http://localhost:8080 -Dselenide.browser=chrome'
+                    sh '_JAVA_OPTIONS=-Dfile.encoding=UTF-8 xvfb-run mvn clean test -f at -Dselenide.baseUrl=http://localhost:8081 -Dselenide.browser=chrome'
                 }
             }
         }
