@@ -48,6 +48,7 @@ pipeline {
                 sh """
                   mvn sonar:sonar \
                     -f backend \
+                    -Dsonar.host.url=http://sonar:9000 \
                     -Dsonar.projectKey=workshop:backend \
                     -Dsonar.projectName=backend
                 """
