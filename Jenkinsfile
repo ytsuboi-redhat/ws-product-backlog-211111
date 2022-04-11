@@ -31,9 +31,9 @@ pipeline {
 //                    // Run Backend UT
 //                    //sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
                       sh 'mvn clean package -f backend -DskipTests=true'
-//                }
-//            }
-//        }
+                }
+            }
+        }
         stage('静的解析') {
             steps {
 //                withSonarQubeEnv('default') {
