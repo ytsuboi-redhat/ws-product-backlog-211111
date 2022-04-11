@@ -23,13 +23,14 @@ pipeline {
                 }
             }
         }
-//        stage('単体テスト') {
-//            steps {
-//                script {
+        stage('backendビルド') {
+            steps {
+                script {
 //                    // Wait until mysql service is up
 //                    sh './todo-backend/wait-for-it.sh -t 30 todo-mysql:3306'
 //                    // Run Backend UT
-//                    sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
+//                    //sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
+                      sh 'mvn clean package -f backend -DskipTests=true'
 //                }
 //            }
 //        }
