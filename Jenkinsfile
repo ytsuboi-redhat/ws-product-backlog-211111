@@ -3,12 +3,24 @@ properties([pipelineTriggers([pollSCM('H/2 * * * *')])])
 pipeline {
     agent any
     tools {
-        maven 'maven3.6.0'
+        maven 'maven3.6.3'
     }
     stages {
         stage('チェックアウト') {
             steps {
                 checkout scm
+            }
+        }
+        stage('frontendビルド') {
+            steps {
+                dir('frontend') {
+                    nodejs(nodeJSInstallationName: 'NodeJS LTS') {
+                        // prepare
+                        sh 'npm install --slient'
+                        // Run Frontend UT
+                        // sh 'npm run test:unit'
+                    }
+                }
             }
         }
 //        stage('単体テスト') {
@@ -44,7 +56,7 @@ pipeline {
         stage('frontend実行') {
             steps {
                 dir('frontend') {
-                    nodejs(nodeJSInstallationName: 'Node 10.14.x') {
+                    nodejs(nodeJSInstallationName: 'NodeJS LTS') {
                         sh 'npm run serve'
                     }   
                 }
