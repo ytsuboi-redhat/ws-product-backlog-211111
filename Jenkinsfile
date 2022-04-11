@@ -59,7 +59,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-                        sh 'npm run serve'
+                        sh 'nohup npm run serve'
                     }   
                 }
             }
@@ -82,6 +82,7 @@ pipeline {
         always {
             // save test JUnit format reports
             junit allowEmptyResults: true, testResults: 'test/**/*.xml'
+            sh 'pkill npm'
         }
         failure {
             echo 'FAILURE!!!'
