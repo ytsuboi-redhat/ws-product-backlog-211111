@@ -11,28 +11,28 @@ pipeline {
                 checkout scm
             }
         }
-#        stage('単体テスト') {
-#            steps {
-#                script {
-#                    // Wait until mysql service is up
-#                    sh './todo-backend/wait-for-it.sh -t 30 todo-mysql:3306'
-#                    // Run Backend UT
-#                    sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
-#                }
-#            }
-#        }
+//        stage('単体テスト') {
+//            steps {
+//                script {
+//                    // Wait until mysql service is up
+//                    sh './todo-backend/wait-for-it.sh -t 30 todo-mysql:3306'
+//                    // Run Backend UT
+//                    sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
+//                }
+//            }
+//        }
         stage('静的解析') {
             steps {
-#                withSonarQubeEnv('default') {
-#                    sh """
-#                      ${tool 'sonarqube-scanner'}/bin/sonar-scanner \
-#                        -Dsonar.projectKey=workshop:frontend \
-#                        -Dsonar.projectName=team2-frontend \
-#                        -Dsonar.projectVersion=1 \
-#                        -Dsonar.javascript.lcov.reportPaths=frontend/tests/unit/coverage/lcov.info \
-#                        -Dsonar.sources=frontend/src 
-#                    """
-#                }
+//                withSonarQubeEnv('default') {
+//                    sh """
+//                      ${tool 'sonarqube-scanner'}/bin/sonar-scanner \
+//                        -Dsonar.projectKey=workshop:frontend \
+//                        -Dsonar.projectName=team2-frontend \
+//                        -Dsonar.projectVersion=1 \
+//                        -Dsonar.javascript.lcov.reportPaths=frontend/tests/unit/coverage/lcov.info \
+//                        -Dsonar.sources=frontend/src 
+//                    """
+//                }
                 sh """
                   mvn sonar:sonar \
                     -f backend \
@@ -50,12 +50,12 @@ pipeline {
                 }
             }
         }
-#        stage('backend実行') {
-#            steps {
-#                sh 'mvn clean package -Dmaven.test.skip=true -f todo-backend'
-#                sh 'oc start-build todo-backend --from-dir=./todo-backend --follow -n cicd2'
-#            }
-#        }
+//        stage('backend実行') {
+//            steps {
+//                sh 'mvn clean package -Dmaven.test.skip=true -f todo-backend'
+//                sh 'oc start-build todo-backend --from-dir=./todo-backend --follow -n cicd2'
+//            }
+//        }
         stage('受け入れテスト') {
             steps {
                 script {
