@@ -83,7 +83,6 @@ pipeline {
         always {
             // save test JUnit format reports
             junit allowEmptyResults: true, testResults: 'test/**/*.xml'
-            sh 'pkill npm'
         }
         failure {
             echo 'FAILURE!!!'
