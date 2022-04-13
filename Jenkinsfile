@@ -60,7 +60,7 @@ pipeline {
                 dir('frontend') {
                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
                         sh 'npm run build'
-                        sh 'cp -r dist /usr/share/nginx/html'
+                        sh 'cp -r dist/* /usr/share/nginx/html'
                     }   
                 }
             }
@@ -74,7 +74,7 @@ pipeline {
         stage('受け入れテスト') {
             steps {
                 script {
-                    sh '_JAVA_OPTIONS=-Dfile.encoding=UTF-8 xvfb-run mvn clean test -f at -Dselenide.baseUrl=http://localhost:8081 -Dselenide.browser=chrome'
+                    sh '_JAVA_OPTIONS=-Dfile.encoding=UTF-8 xvfb-run mvn clean test -f at -Dselenide.baseUrl=http://localhost:80 -Dselenide.browser=chrome'
                 }
             }
         }
