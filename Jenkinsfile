@@ -60,7 +60,7 @@ pipeline {
                 dir('frontend') {
                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
                         sh 'npm run build'
-                        sh 'rm /usr/share/nginx/html/*'
+                        sh 'rm -r /usr/share/nginx/html/*'
                         sh 'cp -r dist/* /usr/share/nginx/html'
                     }   
                 }
