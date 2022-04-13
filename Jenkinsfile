@@ -59,7 +59,8 @@ pipeline {
             steps {
                 dir('frontend') {
                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-                        sh 'npm run serve &'
+                        sh 'npm run build'
+                        sh 'cp dist /usr/share/nginx/html'
                     }   
                 }
             }
