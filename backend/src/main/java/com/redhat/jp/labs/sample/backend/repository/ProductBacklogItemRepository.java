@@ -9,9 +9,8 @@ import java.util.List;
 
 public interface ProductBacklogItemRepository extends CrudRepository<ProductBacklogItem, Long> {
 
-    @Query("select * from prodcut_backlog_item i " +
-            "inner join product_backlog_order o on i.itemId = o.itemId " +
-            "limit :count offset :start " +
-            "order by o.index")
-    public List<ProductBacklogItem> find(long limit, long offset);
+    @Query("select * from product_backlog_item " +
+            "order by item_id " +
+            "limit :limit offset :offset")
+    public List<ProductBacklogItem> find(int limit, int offset);
 }

@@ -36,12 +36,13 @@
 </template>
 
 <script>
-import backlogData from '@/assets/data/backlog.json'
+import ProductBacklogService from '@/services/ProductBacklogService'
 
 const draggable = require('vuedraggable')
+const productBackLogService = new ProductBacklogService()
 
 export default {
-  name: 'Backlog',
+  name: 'ProductBacklog',
   props: {
     msg: String
   },
@@ -51,8 +52,17 @@ export default {
   data () {
     return {
       message: '',
-      backlog: backlogData
+      backlog: []
     }
+  },
+  mounted () {
+    productBackLogService.getAll()
+      .then(response => {
+        this.backlog = response.data
+      })
+      .catch(response => {
+        this.message = response.data
+      })
   },
   methods: {
     end () {

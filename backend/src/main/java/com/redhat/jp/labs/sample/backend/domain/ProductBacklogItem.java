@@ -1,14 +1,11 @@
 package com.redhat.jp.labs.sample.backend.domain;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
 
-public class ProductBacklogItem extends GenericDomain {
+public class ProductBacklogItem {
 
     @Id
     private Long itemId;
@@ -17,41 +14,28 @@ public class ProductBacklogItem extends GenericDomain {
     @Size(min = 1)
     private String name;
 
-    private String label;
-
     private String description;
 
     private String storyPoint;
 
     private String memo;
 
-    private byte[] attachment;
-
     public ProductBacklogItem() {
     }
 
-    public ProductBacklogItem(String name, String label, String description, String storyPoint, String memo, byte[] attachment) {
+    public ProductBacklogItem(String name, String description, String storyPoint, String memo) {
         this.name = name;
-        this.label = label;
         this.description = description;
         this.storyPoint = storyPoint;
         this.memo = memo;
-        this.attachment = attachment;
     }
 
-    public ProductBacklogItem(long itemId, String name, String label, String description, String storyPoint, String memo, byte[] attachment) {
+    public ProductBacklogItem(long itemId, String name, String description, String storyPoint, String memo) {
         this.itemId = itemId;
         this.name = name;
-        this.label = label;
         this.description = description;
         this.storyPoint = storyPoint;
         this.memo = memo;
-        this.attachment = attachment;
-    }
-
-    @Override
-    protected Object keyObject() {
-        return getItemId();
     }
 
     public Long getItemId() {
@@ -68,14 +52,6 @@ public class ProductBacklogItem extends GenericDomain {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public String getDescription() {
@@ -102,27 +78,52 @@ public class ProductBacklogItem extends GenericDomain {
         this.memo = memo;
     }
 
-    public byte[] getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(byte[] attachment) {
-        this.attachment = attachment;
-    }
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        ProductBacklogItem that = (ProductBacklogItem) o;
-        return itemId.equals(that.itemId) && name.equals(that.name) && Objects.equals(label, that.label) && Objects.equals(description, that.description) && Objects.equals(storyPoint, that.storyPoint) && Objects.equals(memo, that.memo) && Arrays.equals(attachment, that.attachment);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductBacklogItem other = (ProductBacklogItem) obj;
+        if (description == null) {
+            if (other.description != null)
+                return false;
+        } else if (!description.equals(other.description))
+            return false;
+        if (itemId == null) {
+            if (other.itemId != null)
+                return false;
+        } else if (!itemId.equals(other.itemId))
+            return false;
+        if (memo == null) {
+            if (other.memo != null)
+                return false;
+        } else if (!memo.equals(other.memo))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (storyPoint == null) {
+            if (other.storyPoint != null)
+                return false;
+        } else if (!storyPoint.equals(other.storyPoint))
+            return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), itemId, name, label, description, storyPoint, memo);
-        result = 31 * result + Arrays.hashCode(attachment);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((itemId == null) ? 0 : itemId.hashCode());
+        result = prime * result + ((memo == null) ? 0 : memo.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((storyPoint == null) ? 0 : storyPoint.hashCode());
         return result;
     }
 }
