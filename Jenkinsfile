@@ -30,7 +30,7 @@ pipeline {
 //                    sh './todo-backend/wait-for-it.sh -t 30 todo-mysql:3306'
 //                    // Run Backend UT
 //                    //sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
-                      sh 'mvn clean package -f backend -DskipTests=true'
+                      sh 'mvn clean package -f backend'
                 }
             }
         }
@@ -66,17 +66,14 @@ pipeline {
                 }
             }
         }
-//        stage('backend実行') {
-//            steps {
-//                sh 'mvn clean package -Dmaven.test.skip=true -f todo-backend'
-//                sh 'oc start-build todo-backend --from-dir=./todo-backend --follow -n cicd2'
-//            }
-//        }
+        stage('backend実行') {
+            steps {
+                sh 'mvn spring-boot:run -Dspring.profiles.active=jenkins -f backend'
+            }
+        }
         stage('受け入れテスト') {
             steps {
-                script {
-                    sh '_JAVA_OPTIONS=-Dfile.encoding=UTF-8 xvfb-run mvn clean test -f at -Dselenide.baseUrl=http://nginx -Dselenide.browser=chrome'
-                }
+                sh '_JAVA_OPTIONS=-Dfile.encoding=UTF-8 xvfb-run mvn clean test -f at -Dselenide.baseUrl=http://nginx -Dselenide.browser=chrome'
             }
         }
     }
