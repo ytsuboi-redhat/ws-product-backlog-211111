@@ -65,8 +65,10 @@ pipeline {
         }
         stage('backendデプロイ') {
             steps {
-                sh 'mvn spring-boot:stop'
-                sh 'mvn spring-boot:start -Dspring-boot.run.profiles=jenkins'
+                dir('backend') {
+                    sh 'mvn spring-boot:stop'
+                    sh 'mvn spring-boot:start -Dspring-boot.run.profiles=jenkins'
+                }
             }
         }
         stage('受け入れテスト') {
