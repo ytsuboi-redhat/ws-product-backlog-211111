@@ -19,14 +19,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TestConfig {
 
-//    @Autowired
-//    DataSource dataSource;
-//
-//    @Bean("mysqlDatabaseConnection")
-//    public IDatabaseConnection dbUnitDatabaseConnection(DataSource dataSource) throws DatabaseUnitException, SQLException {
-//        return new MySqlConnection(dataSource.getConnection(), "todo");
-//    }
-
     @Bean
     public DatabaseConfigBean dbUnitDatabaseConfig() {
         DatabaseConfigBean bean = new DatabaseConfigBean();
@@ -39,7 +31,7 @@ public class TestConfig {
     @Bean
     public DatabaseDataSourceConnectionFactoryBean dbUnitDatabaseConnection(DatabaseConfigBean dbunitDatabaseConfig, DataSource dataSource) {
         DatabaseDataSourceConnectionFactoryBean bean = new DatabaseDataSourceConnectionFactoryBean(dataSource);
-        bean.setSchema("todo");
+        bean.setSchema("backlog");
         bean.setDatabaseConfig(dbunitDatabaseConfig);
         return bean;
     }

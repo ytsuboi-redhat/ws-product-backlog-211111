@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="row p-3">
-      <button id="register-button" class="btn btn-outline-primary" @mouseup="routeRegister">register</button>
+      <!--<button id="register-button" class="btn btn-outline-primary" @mouseup="routeRegister">register</button>-->
     </div>
   </div>
 </template>

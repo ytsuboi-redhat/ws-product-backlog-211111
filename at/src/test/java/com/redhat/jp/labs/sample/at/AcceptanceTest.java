@@ -6,6 +6,7 @@ import org.dbunit.IOperationListener;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 import org.dbunit.ext.mysql.MySqlMetadataHandler;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -58,12 +59,14 @@ public class AcceptanceTest {
 		Configuration.headless = false;
 	}
 
-    private static void configureDatabaseTester() throws Exception {
-        IDatabaseConnection databaseConnection = new DatabaseConnection(DriverManager.getConnection(DB_URL, DB_USER, DB_PASS));
-        DatabaseConfig databaseConfig = databaseConnection.getConfig();
-        databaseConfig.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, true);
-        databaseTester = new DefaultDatabaseTester(databaseConnection);
-        databaseTester.setOperationListener(IOperationListener.NO_OP_OPERATION_LISTENER);
-    }
+	private static void configureDatabaseTester() throws Exception {
+		IDatabaseConnection databaseConnection = new DatabaseConnection(DriverManager.getConnection(DB_URL, DB_USER, DB_PASS));
+		DatabaseConfig databaseConfig = databaseConnection.getConfig();
+		databaseConfig.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, true);
+		databaseConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
+		databaseConfig.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
+		databaseTester = new DefaultDatabaseTester(databaseConnection);
+		databaseTester.setOperationListener(IOperationListener.NO_OP_OPERATION_LISTENER);
+	}
 
 }
