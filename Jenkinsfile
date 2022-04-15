@@ -68,7 +68,7 @@ pipeline {
         }
         stage('backend実行') {
             steps {
-                sh 'mvn spring-boot:run -Dspring.profiles.active=jenkins -f backend'
+                sh 'java -jar backend/target/backend.jar --spring.profiles.active=jenkins'
             }
         }
         stage('受け入れテスト') {
