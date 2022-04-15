@@ -10,7 +10,6 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">name</th>
-                <th scope="col">labels</th>
                 <th scope="col">story point</th>
               </tr>
             </thead>
@@ -18,9 +17,6 @@
               <tr v-for="item in backlog" v-bind:key="item.itemId" v-bind:id="'item-' + item.itemId" @dblclick="routeUpdate(item.itemId)">
                 <td class="itemId">{{ item.itemId }}</td>
                 <td class="name">{{ item.name }}</td>
-                <td class="labels">
-                  <span v-for="label in item.labels" v-bind:key="label"><span class="badge badge-primary">{{ label }}</span>&nbsp;</span>
-                </td>
                 <td class="story-point">{{ item.storyPoint }}</td>
               </tr>
             </draggable>
@@ -30,7 +26,6 @@
     </div>
     <div class="row p-3">
       <button id="register-button" class="btn btn-outline-primary" @mouseup="routeRegister">register</button>
-      <router-link to="backlog-item">test</router-link>
     </div>
   </div>
 </template>
