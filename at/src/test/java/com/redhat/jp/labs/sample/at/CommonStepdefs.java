@@ -56,15 +56,6 @@ public class CommonStepdefs {
             Map<String, String> dataTableMap = dataTableRows.get(i);
 
             tr.$("td.name").should(Condition.text(dataTableMap.get("name")));
-
-            if (dataTableMap.get("label") == null) {
-                tr.$("td.labels").should(Condition.empty);
-            } else {
-                String[] collectLabels = dataTableMap.get("label").split(",");
-                tr.$$("td.labels .badge").shouldHaveSize(collectLabels.length);
-                tr.$$("td.labels .badge").shouldHave(CollectionCondition.exactTexts(collectLabels));
-            }
-
             tr.$("td.story-point").should(Condition.text(dataTableMap.get("story point")));
         }
     }
