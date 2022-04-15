@@ -28,6 +28,12 @@ import com.codeborne.selenide.junit.TextReport;
 		"html:target/cucumber-reports.html" }, monochrome = true, snippets = SnippetType.UNDERSCORE, tags = "not @Ignore")
 public class AcceptanceTest {
 
+    private static final String DB_URL = System.getProperty("at.db.url", "jdbc:mysql://localhost:3306/backlog");
+    private static final String DB_USER = System.getProperty("at.db.user", "backlog");
+    private static final String DB_PASS = System.getProperty("at.db.pass", "password");
+
+    public static IDatabaseTester databaseTester;
+
 	@ClassRule
 	public static TestRule report = new TextReport().onFailedTest(true).onSucceededTest(true);
 
@@ -35,6 +41,7 @@ public class AcceptanceTest {
 	public static void beforeClass() throws Exception {
 		configureLogging();
 		configureE2ETester();
+		configureDatabaseTester();
 	}
 
 	private static void configureLogging() {
@@ -50,5 +57,13 @@ public class AcceptanceTest {
 		}
 		Configuration.headless = false;
 	}
+
+    private static void configureDatabaseTester() throws Exception {
+        IDatabaseConnection databaseConnection = new DatabaseConnection(DriverManager.getConnection(DB_URL, DB_USER, DB_PASS));
+        DatabaseConfig databaseConfig = databaseConnection.getConfig();
+        databaseConfig.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, true);
+        databaseTester = new DefaultDatabaseTester(databaseConnection);
+        databaseTester.setOperationListener(IOperationListener.NO_OP_OPERATION_LISTENER);
+    }
 
 }

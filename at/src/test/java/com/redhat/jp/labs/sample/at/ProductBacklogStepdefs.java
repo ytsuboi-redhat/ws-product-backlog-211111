@@ -23,20 +23,6 @@ public class ProductBacklogStepdefs {
         $$("#product-backlog tbody tr").shouldHaveSize(count);
     }
 
-    @When("name が {string} の Product Backlog Item を {int} 番目に移動する")
-    public void nameがのProductBacklogItemを番目に移動する(String name, int row) {
-        ElementsCollection trCollection = $$("#product-backlog tbody tr");
-        String fromId = null;
-        for (int i = 0; i < trCollection.size(); i++) {
-            SelenideElement tr = trCollection.get(i);
-            if (name.equals(tr.$("td.name").text())) {
-                fromId = tr.getId();
-                break;
-            }
-        }
-        $(fromId).dragAndDropTo(trCollection.get(row - 1));
-    }
-
     @Then("以下の name の順序通りに Product Backlog Item が表示される")
     public void 以下のnameの順序通りにProductBacklogItemが表示される(DataTable dataTable) {
         List<Map<String, String>> dataTableMaps = dataTable.asMaps();

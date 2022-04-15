@@ -1,47 +1,42 @@
 package com.redhat.jp.labs.sample.at;
 
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.open;
+
+import java.util.List;
+import java.util.Map;
+
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+
+import org.dbunit.IDatabaseTester;
+import org.dbunit.database.DatabaseDataSet;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.operation.DatabaseOperation;
+import org.dbunit.util.fileloader.CsvDataFileLoader;
+import org.dbunit.util.fileloader.DataFileLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.*;
-import java.util.List;
-import java.util.Map;
-
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 
 public class CommonStepdefs {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("CommonStepdefs");
-
-    private static final Path TARGET_FILE_PATH = Paths.get("../frontend/src/assets/data/backlog.json");
-
-    @Given("{int} 個の Product Backlog Item が登録されている")
-    public void n個のProductBacklogItemが登録されている(int count) {
-        replaceBacklogData(String.format("/data/%d.json", count));
-    }
-
-    @Given("一意の優先順位が設定された {int} 個の Product Backlog Item が登録されている")
-    public void 一意の優先順位が設定された個のProductBacklogItemが登録されている(int count) {
-        replaceBacklogData(String.format("/data/%d_prioritized.json", count));
-    }
+    
+    private IDatabaseTester dbTester = AcceptanceTest.databaseTester;
 
     @Given("以下の Product Backlog Item が登録されている")
-    public void 以下のProductBacklogItemが登録されている(DataTable dataTable) {
-        // TODO
-        replaceBacklogData("/data/3.json");
+    public void 以下のProductBacklogItemが登録されている(DataTable dataTable) throws Exception {
+        DataFileLoader loader = new CsvDataFileLoader();
+        dbTester.setDataSet(loader.load("/dbunit/ProductBacklogItem/"));
+        dbTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
+        dbTester.onSetup();
     }
 
     @When("Product Backlog 画面を開く")
@@ -71,16 +66,6 @@ public class CommonStepdefs {
             }
 
             tr.$("td.story-point").should(Condition.text(dataTableMap.get("story point")));
-        }
-    }
-
-    private void replaceBacklogData(String testDataFile) {
-        try {
-            URL url = getClass().getResource(testDataFile);
-            Path file = Paths.get(url.toURI());
-            Files.copy(file, TARGET_FILE_PATH, StandardCopyOption.REPLACE_EXISTING);
-        } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }
