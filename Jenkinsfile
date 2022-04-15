@@ -15,10 +15,8 @@ pipeline {
             steps {
                 dir('frontend') {
                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-                        // prepare
                         sh 'npm install --silent'
-                        // Run Frontend UT
-                        // sh 'npm run test:unit'
+                        sh 'npm run build'
                     }
                 }
             }
@@ -55,20 +53,20 @@ pipeline {
                 """
             }
         }
-        stage('frontend実行') {
+        stage('frontendデプロイ') {
             steps {
                 dir('frontend') {
                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-                        sh 'npm run build'
                         sh 'rm -r /usr/share/nginx/html/*'
                         sh 'cp -r dist/* /usr/share/nginx/html'
                     }   
                 }
             }
         }
-        stage('backend実行') {
+        stage('backendデプロイ') {
             steps {
-                sh 'java -jar backend/target/backend.jar --spring.profiles.active=jenkins'
+                sh 'mvn spring-boot:stop'
+                sh 'mvn spring-boot:start -Dspring-boot.run.profiles=jenkins'
             }
         }
         stage('受け入れテスト') {
