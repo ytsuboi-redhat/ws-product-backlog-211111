@@ -73,7 +73,7 @@ pipeline {
         }
         stage('受け入れテスト') {
             steps {
-                sh '_JAVA_OPTIONS=-Dfile.encoding=UTF-8 xvfb-run mvn clean test -f at -Dselenide.baseUrl=http://nginx -Dselenide.browser=chrome'
+                sh '_JAVA_OPTIONS=-Dfile.encoding=UTF-8 xvfb-run mvn clean test -f at -Dselenide.baseUrl=http://nginx -Dselenide.browser=chrome -Dat.db.url=jdbc:mysql://mariadb:3306/backlog'
             }
         }
     }
