@@ -67,7 +67,7 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'mvn spring-boot:stop'
-                    sh 'mvn spring-boot:start -Dspring-boot.run.profiles=jenkins'
+                    sh 'nohup mvn spring-boot:start -Dspring-boot.run.profiles=jenkins'
                 }
             }
         }
