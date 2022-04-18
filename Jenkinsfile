@@ -11,27 +11,27 @@ pipeline {
                 checkout scm
             }
         }
-//         stage('frontendビルド') {
-//             steps {
-//                 dir('frontend') {
-//                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-//                         sh 'npm install --silent'
-//                         sh 'npm run build'
-//                     }
-//                 }
-//             }
-//         }
-//         stage('backendビルド') {
-//             steps {
-//                 script {
-// //                    // Wait until mysql service is up
-// //                    sh './todo-backend/wait-for-it.sh -t 30 todo-mysql:3306'
-// //                    // Run Backend UT
-// //                    //sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
-//                       sh 'mvn clean package -f backend'
-//                 }
-//             }
-//         }
+        stage('frontendビルド') {
+            steps {
+                dir('frontend') {
+                    nodejs(nodeJSInstallationName: 'NodeJS LTS') {
+                        sh 'npm install --silent'
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+        stage('backendビルド') {
+            steps {
+                script {
+//                    // Wait until mysql service is up
+//                    sh './todo-backend/wait-for-it.sh -t 30 todo-mysql:3306'
+//                    // Run Backend UT
+//                    //sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
+                      sh 'mvn clean package -f backend'
+                }
+            }
+        }
 //         stage('静的解析') {
 //             steps {
 // //                withSonarQubeEnv('default') {
@@ -75,10 +75,21 @@ pipeline {
             }
         }
         stage('backendデプロイ') {
+            // steps {
+            //     dir('backend') {
+            //         sh 'docker build -t backend:latest'
+            //         sh 'docker run --rm backend'
+            //     }
+            // }
+            agent {
+                dockerfile {
+                    dir 'backend'
+                }
+            }
             steps {
-                dir('backend') {
-                    sh 'docker build -t backend:latest'
-                    sh 'docker run --rm backend'
+                script {
+                    def image = docker.build()
+                    image.run()
                 }
             }
         }
