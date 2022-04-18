@@ -58,7 +58,7 @@ pipeline {
                 dir('frontend') {
                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
                         sh 'docker build . -t frontend:latest'
-                        sh 'docker run --name frontend --net=ci_default --rm frontend'
+                        sh 'docker run -d --name frontend --net=ci_default --rm frontend'
                     }   
                 }
             }
@@ -78,7 +78,7 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'docker build . -t backend:latest'
-                    sh 'docker run --name backend --net=ci_default --rm backend'
+                    sh 'docker run -d --name backend --net=ci_default --rm backend'
                 }
             }
         }
