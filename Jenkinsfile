@@ -64,7 +64,7 @@ pipeline {
             // }
             agent {
                 dockerfile {
-                    filename './frontend/Dockerfile'
+                    dir 'frontend'
                 }
             }
             steps {
