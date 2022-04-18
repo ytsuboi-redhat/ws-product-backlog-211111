@@ -28,7 +28,7 @@ import io.cucumber.java.en.When;
 public class CommonStepdefs {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("CommonStepdefs");
-    
+
     private IDatabaseTester dbTester = AcceptanceTest.databaseTester;
 
     @Given("以下の Product Backlog Item が登録されている")

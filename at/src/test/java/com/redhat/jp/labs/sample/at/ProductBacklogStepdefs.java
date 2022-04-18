@@ -29,14 +29,15 @@ public class ProductBacklogStepdefs {
         ElementsCollection trCollection = $$("#product-backlog tbody tr");
         trCollection.shouldHaveSize(dataTableMaps.size());
         for (int i = 0; i < dataTableMaps.size(); i++) {
-            trCollection.get(i).$("td.name").should(Condition.text(dataTableMaps.get(i).get("name")));
+            trCollection.get(i).$("td.name")
+                    .should(Condition.text(dataTableMaps.get(i).get("name")));
         }
     }
 
     @And("Product Backlog Item の id が自動的に重複無く採番され表示されていること")
     public void productBacklogItemのIdが自動的に重複無く採番され表示されていること() {
         Set<String> itemId = new HashSet<>();
-        for(SelenideElement itemIdElement : $$("#product-backlog tbody tr td.itemId")) {
+        for (SelenideElement itemIdElement : $$("#product-backlog tbody tr td.itemId")) {
             itemIdElement.shouldNot(Condition.empty);
             Assert.assertTrue(itemId.add(itemIdElement.text()));
         }
