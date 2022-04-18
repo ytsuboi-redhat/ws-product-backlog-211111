@@ -11,63 +11,74 @@ pipeline {
                 checkout scm
             }
         }
-        stage('frontendビルド') {
-            steps {
-                dir('frontend') {
-                    nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-                        sh 'npm install --silent'
-                        sh 'npm run build'
-                    }
+//         stage('frontendビルド') {
+//             steps {
+//                 dir('frontend') {
+//                     nodejs(nodeJSInstallationName: 'NodeJS LTS') {
+//                         sh 'npm install --silent'
+//                         sh 'npm run build'
+//                     }
+//                 }
+//             }
+//         }
+//         stage('backendビルド') {
+//             steps {
+//                 script {
+// //                    // Wait until mysql service is up
+// //                    sh './todo-backend/wait-for-it.sh -t 30 todo-mysql:3306'
+// //                    // Run Backend UT
+// //                    //sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
+//                       sh 'mvn clean package -f backend'
+//                 }
+//             }
+//         }
+//         stage('静的解析') {
+//             steps {
+// //                withSonarQubeEnv('default') {
+// //                    sh """
+// //                      ${tool 'sonarqube-scanner'}/bin/sonar-scanner \
+// //                        -Dsonar.projectKey=workshop:frontend \
+// //                        -Dsonar.projectName=team2-frontend \
+// //                        -Dsonar.projectVersion=1 \
+// //                        -Dsonar.javascript.lcov.reportPaths=frontend/tests/unit/coverage/lcov.info \
+// //                        -Dsonar.sources=frontend/src 
+// //                    """
+// //                }
+//                 sh """
+//                   mvn sonar:sonar \
+//                     -f backend \
+//                     -Dsonar.host.url=http://sonar:9000 \
+//                     -Dsonar.projectKey=workshop:backend \
+//                     -Dsonar.projectName=backend
+//                 """
+//             }
+//         }
+        stage('frontendデプロイ') {
+            // steps {
+            //     dir('frontend') {
+            //         nodejs(nodeJSInstallationName: 'NodeJS LTS') {
+            //             sh 'docker build -t frontend:latest'
+            //             sh 'docker run --rm frontend'
+            //         }   
+            //     }
+            // }
+            agent {
+                dockerfile {
+                    filename './frontend/Dockerfile'
                 }
             }
-        }
-        stage('backendビルド') {
             steps {
                 script {
-//                    // Wait until mysql service is up
-//                    sh './todo-backend/wait-for-it.sh -t 30 todo-mysql:3306'
-//                    // Run Backend UT
-//                    //sh 'mvn clean jacoco:prepare-agent test jacoco:report -f todo-backend'
-                      sh 'mvn clean package -f backend'
-                }
-            }
-        }
-        stage('静的解析') {
-            steps {
-//                withSonarQubeEnv('default') {
-//                    sh """
-//                      ${tool 'sonarqube-scanner'}/bin/sonar-scanner \
-//                        -Dsonar.projectKey=workshop:frontend \
-//                        -Dsonar.projectName=team2-frontend \
-//                        -Dsonar.projectVersion=1 \
-//                        -Dsonar.javascript.lcov.reportPaths=frontend/tests/unit/coverage/lcov.info \
-//                        -Dsonar.sources=frontend/src 
-//                    """
-//                }
-                sh """
-                  mvn sonar:sonar \
-                    -f backend \
-                    -Dsonar.host.url=http://sonar:9000 \
-                    -Dsonar.projectKey=workshop:backend \
-                    -Dsonar.projectName=backend
-                """
-            }
-        }
-        stage('frontendデプロイ') {
-            steps {
-                dir('frontend') {
-                    nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-                        sh 'rm -r /usr/share/nginx/html/*'
-                        sh 'cp -r dist/* /usr/share/nginx/html'
-                    }   
+                    def image = docker.build()
+                    image.run()
                 }
             }
         }
         stage('backendデプロイ') {
             steps {
                 dir('backend') {
-                    sh 'mvn spring-boot:stop'
-                    sh 'nohup mvn spring-boot:start -Dspring-boot.run.profiles=jenkins'
+                    sh 'docker build -t backend:latest'
+                    sh 'docker run --rm backend'
                 }
             }
         }
