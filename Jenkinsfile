@@ -11,16 +11,6 @@ pipeline {
                 checkout scm
             }
         }
-        stage('frontendビルド') {
-            steps {
-                dir('frontend') {
-                    nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-                        sh 'npm install --silent'
-                        sh 'npm run build'
-                    }
-                }
-            }
-        }
         stage('backend単体テスト') {
             steps {
                 dir('backend') {
