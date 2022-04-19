@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
   jenkins:
     build: "./jenkins"
@@ -6,22 +6,16 @@ services:
     environment: 
       JAVA_OPTS: "-Djava.awt.headless=true -Duser.timezone=Asia/Tokyo -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8"
     ports:
-      - "1080:8080"
+      - "18080:8080"
+      - "50000:50000"
     volumes:
-      - "vol-nginx:/usr/share/nginx/html"
       - "vol-jenkins:/var/jenkins_home"
+      - "/var/run/docker.sock:/var/run/docker.sock"
   sonar:
     image: "sonarqube:lts"
     container_name: "workshop-sonar"
     ports:
       - "9000:9000"
-  nginx:
-    build: "./nginx"
-    container_name: "workshop-nginx"
-    ports:
-      - "80:80"
-    volumes:
-      - "vol-nginx:/usr/share/nginx/html"
   mariadb:
     build: "./mariadb"
     container_name: "workshop-mariadb"
@@ -35,4 +29,3 @@ services:
 
 volumes:
   vol-jenkins:
-  vol-nginx:
