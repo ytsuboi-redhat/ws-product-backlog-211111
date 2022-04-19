@@ -57,8 +57,8 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'docker build . -t backend:latest'
-                    sh 'docker stop backend'
-                    sh 'docker run -d --name backend --net=ci_default --rm -p 8080:8080 backend'
+                    sh 'docker rm -f backend'
+                    sh 'docker run -d --name backend --net=ci_default -p 8080:8080 backend'
                 }
             }
         }
@@ -66,8 +66,8 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh 'docker build . -t frontend:latest'
-                    sh 'docker stop backend'
-                    sh 'docker run -d --name frontend --net=ci_default --rm -p 80:80 frontend'
+                    sh 'docker rm -f frontend'
+                    sh 'docker run -d --name frontend --net=ci_default -p 80:80 frontend'
                 }
             }
             // agent {
