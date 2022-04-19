@@ -53,13 +53,21 @@ pipeline {
 //                 """
 //             }
 //         }
+        stage('backendデプロイ') {
+            steps {
+                dir('backend') {
+                    sh 'docker build . -t backend:latest'
+                    sh 'docker stop backend'
+                    sh 'docker run -d --name backend --net=ci_default --rm -p 8080:8080 backend'
+                }
+            }
+        }
         stage('frontendデプロイ') {
             steps {
                 dir('frontend') {
-                    nodejs(nodeJSInstallationName: 'NodeJS LTS') {
-                        sh 'docker build . -t frontend:latest'
-                        sh 'docker run -d --name frontend --net=ci_default --rm frontend'
-                    }   
+                    sh 'docker build . -t frontend:latest'
+                    sh 'docker stop backend'
+                    sh 'docker run -d --name frontend --net=ci_default --rm -p 80:80 frontend'
                 }
             }
             // agent {
@@ -73,14 +81,6 @@ pipeline {
             //         image.run()
             //     }
             // }
-        }
-        stage('backendデプロイ') {
-            steps {
-                dir('backend') {
-                    sh 'docker build . -t backend:latest'
-                    sh 'docker run -d --name backend --net=ci_default --rm backend'
-                }
-            }
         }
         stage('受け入れテスト') {
             steps {
