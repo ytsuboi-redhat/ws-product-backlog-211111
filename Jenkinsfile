@@ -21,16 +21,16 @@ pipeline {
         stage('静的解析') {
             steps {
                 dir('frontend') {
-                    // withSonarQubeEnv('default') {
-                    //     sh """
-                    //         ${tool 'sonarqube-scanner'}/bin/sonar-scanner \
-                    //         -Dsonar.projectKey=workshop:frontend \
-                    //         -Dsonar.projectName=frontend \
-                    //         -Dsonar.projectVersion=1 \
-                    //         -Dsonar.javascript.lcov.reportPaths=tests/unit/coverage/lcov.info \
-                    //         -Dsonar.sources=src 
-                    //     """
-                    // }
+                    withSonarQubeEnv('default') {
+                        sh """
+                            ${tool 'sonarqube-scanner'}/bin/sonar-scanner \
+                            -Dsonar.projectKey=workshop:frontend \
+                            -Dsonar.projectName=frontend \
+                            -Dsonar.projectVersion=1 \
+                            -Dsonar.javascript.lcov.reportPaths=tests/unit/coverage/lcov.info \
+                            -Dsonar.sources=src 
+                        """
+                    }
                 }
                 dir('backend') {
                     sh """
